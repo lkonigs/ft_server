@@ -1,0 +1,44 @@
+server {
+	listen 80;
+	listen [::]:80;
+
+	server_name TEST1;
+	return 301 https://$host$request_uri;
+
+OU 
+
+	server_name www.localhost localhost;
+	return 301 https://$host:8443$request_uri;
+
+OU
+
+        server_name localhost www.localhost;
+        return 301 https://$server_name$request_uri;
+}
+
+server {
+
+	listen 443 ssl ;
+	listen [::]:443 ssl ;
+	
+    absolute_redirect off;
+
+	server_name TEST1;
+	
+    ssl on;
+	ssl_certificate /etc/nginx/ssl/TEST1.pem;
+	ssl_certificate_key /etc/nginx/ssl/TEST1.key;
+
+	root /var/www/TEST1;
+	index index.html index.htm index.nginx-debian.html index.php;
+
+	location / {
+		autoindex off;
+		try_files $uri $uri/ =404;
+	}
+
+	location ~ \.php$ {
+		include snippets/fastcgi-php.conf;
+		fastcgi_pass unix:/var/run/php/php7.3-fpm.sock;
+	}
+}
