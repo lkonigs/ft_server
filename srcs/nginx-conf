@@ -2,15 +2,13 @@ server {
 	listen 80;
 	listen [::]:80;
 	server_name www.localhost localhost;
-	return 301 https://$host:8443$request_uri;
+	return 301 https://$host$request_uri;
 }
 
 server {
 
 	listen 443 ssl ;
 	listen [::]:443 ssl ;
-	
-    absolute_redirect off;
 
 	server_name localhost;
 	
@@ -22,7 +20,7 @@ server {
 	index index.html index.htm index.nginx-debian.html index.php;
 
 	location / {
-		autoindex off;
+		autoindex on;
 		try_files $uri $uri/ =404;
 	}
 

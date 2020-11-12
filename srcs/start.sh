@@ -21,9 +21,9 @@ echo "<?php phpinfo(); ?>" >> /var/www/localhost/index.php
 # RUN chmod +x /cert/mkcert
 # RUN /cert/mkcert -install
 # RUN /cert/mkcert localhost
-# RUN mv /localhost.pem /localhost-key.pem /cert
+# RUN mv /localhost.pem /localhost.key /cert
 mkdir /etc/nginx/ssl
-openssl req -newkey rsa:4096 -sha256 -days 365 -nodes -out /etc/nginx/ssl/localhost.pem -keyout /etc/nginx/ssl/localhost.key -subj "/C=FR/ST=Paris/L=Paris/O=42/OU=lkonig/CN=localhost"
+openssl req -new -newkey rsa:4096 -x509 -days 365 -nodes -keyout /etc/nginx/ssl/localhost.key -out /etc/nginx/ssl/localhost.pem -subj "/C=FR/ST=France/L=Paris/O=42/OU=lkonig/CN=localhost"
 
 # Init nginx
 # RUN chown -R www-data:www-data /var/www/localhost
