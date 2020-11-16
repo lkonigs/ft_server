@@ -1,8 +1,11 @@
 FROM debian:buster
 
+# WORKDIR ?
+
 # Updates
 RUN apt-get update 
 RUN apt-get upgrade -y
+RUN apt-get clean
 
 # Install nginx, mysql, php and tools
 RUN apt-get -y install nginx
@@ -16,32 +19,11 @@ RUN apt-get -y install libnss3-tools
 # RUN mkdir -p /var/www/localhost/files
 
 # Copy content in working directory
-# COPY ./srcs/start.sh ./
-# COPY srcs/nginx-conf srcs/wp-config.php srcs/phpmyadmin.inc.php /config/
-COPY ./srcs/start.sh ./srcs/nginx-conf ./srcs/wp-config.php ./srcs/phpmyadmin.inc.php ./
-# COPY srcs/wordpress.sql /config/
-# COPY  #### /var/www/localhost/files/
-
-# Start mysql
-RUN service mysql start
-
-# Access rights
-RUN chown -R www-data:www-data /var/www/*
-RUN chmod -R 755 /var/www/*
-
-# Create website
-RUN mkdir -p /var/www/localhost
-RUN touch /var/www/localhost/index.php
-RUN echo "<?php phpinfo(); ?>" >> /var/www/localhost/index.php
-
-# Init SSL
-RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt -subj "/C=FR/ST=FR/L=PARIS/O=42/OU=lkonig/CN=localhost"
-
-# Init nginx
-# RUN chown -R www-data:www-data /var/www/localhost
-RUN mv ./nginx-conf /etc/nginx/sites-available/localhost
-RUN ln -s /etc/nginx/sites-available/localhost /etc/nginx/sites-enabled/localhost
-RUN rm -rf /etc/nginx/sites-enabled/default
+COPY ./srcs/start.sh ./
+COPY ./srcs/wp-config.php ./tmp/wp-config.php
+COPY ./srcs/nginx-conf ./tmp/nginx-conf
+COPY ./srcs/phpmyadmin.inc.php ./tmp/phpmyadmin.inc.php
+# COPY ./srcs/nginx-conf /etc/nginx/sites-enabled
 
 EXPOSE 80 443
 
