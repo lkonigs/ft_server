@@ -127,6 +127,8 @@ La page d'accueil est désignée par `index : index index.html index.htm index.n
 
 `try_files $uri $uri/ =404;` vérifie l'existence des fichiers passés en argument par ordre de priorité. Nginx cherche le fichier sur le serveur en suivant le chemin passé dans l'URL. Si le fichier est  absent, il renverra une erreur 404.
 
+Pour la redirection vers https:// : https://linuxize.com/post/redirect-http-to-https-in-nginx/#:~:text=return%20301%20https%3A%2F%2F%24,domain%20name%20of%20the%20request.
+
 *Sources :*
 - *Les informations sur la configuration viennent de* https://openclassrooms.com/fr/courses/4425101-deployez-une-application-django/4688553-utilisez-le-serveur-http-nginx
 
