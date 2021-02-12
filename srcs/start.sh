@@ -8,8 +8,8 @@ chmod -R 755 /var/www/*
 
 # Init nginx and set autoindex
 if [ "$AUTOINDEX" = "off" ] ;
-    then mv ./default etc/nginx/sites-available/
-    else mv ./default_off etc/nginx/sites-available/default
+    then mv ./default_off etc/nginx/sites-available/
+    else mv ./default etc/nginx/sites-available/default
 fi
 ln -s etc/nginx/sites-available/default etc/nginx/sites-enabled/
 
@@ -19,17 +19,18 @@ echo "CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_
 echo "GRANT ALL ON wordpress.* TO 'wordpress_user'@'localhost' IDENTIFIED BY 'password';" | mysql -u root
 echo "FLUSH PRIVILEGES;" | mysql -u root
 
+
 # Install and config phpmyadmin
 chmod 660 /var/www/localhost/phpmyadmin/config.inc.php
 chown -R www-data:www-data /var/www/localhost/phpmyadmin
 service php7.3-fpm start
+echo "CREATE USER 'lkonig'@'localhost' IDENTIFIED BY 'password'" | mysql -u root
 echo "GRANT ALL ON *.* TO 'lkonig'@'localhost' IDENTIFIED BY 'password'" | mysql -u root
+echo "update mysql.user set plugin='mysql_native_password' where user='root';" | mysql -u root
 echo "FLUSH PRIVILEGES;" | mysql -u root
 echo "<?php phpinfo(); ?>" >> /var/www/localhost/info.php
 
 # Config wordpress
-# mkdir var/www/localhost/wordpress
-# cp -a wordpress/. /var/www/localhost/wordpress
 mv ./wp-config.php /var/www/localhost/wordpress
 
 # Create and launch website

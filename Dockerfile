@@ -6,8 +6,6 @@ ENV AUTOINDEX on
 
 # Updates
 RUN apt-get update 
-# RUN apt-get upgrade -y
-# RUN apt-get clean
 
 # Install nginx, mysql, php and tools
 RUN apt-get install -y \
@@ -47,4 +45,3 @@ EXPOSE 80 443
 
 # Start server
 CMD bash /start.sh
-
