@@ -31,10 +31,10 @@ COPY srcs/default ./
 COPY srcs/default_off ./
 
 # Install and config phpmyadmin
-RUN wget https://files.phpmyadmin.net/phpMyAdmin/5.0.4/phpMyAdmin-5.0.4-english.tar.gz && \
-    tar -xzvf phpMyAdmin-5.0.4-english.tar.gz && \
-    mv phpMyAdmin-5.0.4-english /var/www/localhost/phpmyadmin && \
-    rm phpMyAdmin-5.0.4-english.tar.gz
+RUN wget https://files.phpmyadmin.net/phpMyAdmin/5.0.4/phpMyAdmin-5.0.4-all-languages.tar.gz && \
+    tar -xzvf phpMyAdmin-5.0.4-all-languages.tar.gz && \
+    mv phpMyAdmin-5.0.4-all-languages /var/www/localhost/phpmyadmin && \
+    rm phpMyAdmin-5.0.4-all-languages.tar.gz
 COPY srcs/config.inc.php /var/www/localhost/phpmyadmin
 
 # Install and init wordpress
@@ -42,17 +42,6 @@ RUN wget https://wordpress.org/latest.tar.gz && \
     tar -xzvf latest.tar.gz && \
     mv wordpress /var/www/localhost/ && \
     rm -rf latest.tar.gz
-
-# Init SSL
-RUN mkdir /etc/nginx/ssl
-RUN openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out /etc/nginx/ssl/localhost.pem -keyout /etc/nginx/ssl/localhost.key -subj "/C=FR/ST=Paris/L=Paris/O=42 School/OU=lkonig/CN=localhost"
-
-# Config wordpress
-RUN mv ./wp-config.php /var/www/localhost/wordpress
-
-# Install and config phpmyadmin
-RUN chmod 660 /var/www/localhost/phpmyadmin/config.inc.php
-RUN chown -R www-data:www-data /var/www/localhost/phpmyadmin
 
 EXPOSE 80 443
 
