@@ -8,7 +8,7 @@ chmod -R 755 /var/www/*
 
 # Init nginx and set autoindex
 if [ "$AUTOINDEX" = "off" ] ;
-    then mv ./default_off etc/nginx/sites-available/
+    then mv ./default_off etc/nginx/sites-available/default
     else mv ./default etc/nginx/sites-available/default
 fi
 ln -s etc/nginx/sites-available/default etc/nginx/sites-enabled/
