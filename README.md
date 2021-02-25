@@ -97,15 +97,19 @@ Exemple d'utilisation: `docker exec -ti nomcontainerid bash`
 Installation de nginx : `apt-get -y install nginx`
 Pour initialiser et mettre à jour la configuration de Nginx, il nous faut:
 - créer un nouveau fichier dans sites-available: `RUN mkdir /var/www/localhost`
+- sélectionner le bon fichier de configuration en fonction de la variable d'environnement AUTOINDEX. Par défaut, celle ci est sur "on", mais au moment d'exécuter le container on peut ajouter "-e AUTOINDEX=off". Si c'est le cas, c'est le fichier default_off qui est utilisé, dans lequel la seule différence avec default est la ligne `autoindex on;` remplacée par `autoindex off;`
 - ajouter un lien symbolique dans sites-enabled
 ```
-mv ./default etc/nginx/sites-available
+if [ "$AUTOINDEX" = "off" ] ;
+    then mv ./default_off etc/nginx/sites-available/default
+    else mv ./default etc/nginx/sites-available/default
+fi
 ln -s etc/nginx/sites-available/default etc/nginx/sites-enabled
 ```
 
 Lancement de nginx : `service nginx start`
 
-A ce stade si on ne fait rien de plus, "Welcome to Nginx" devrait s'afficher quand on exécute le container
+Si on ne fait rien de plus, "Welcome to Nginx" devrait s'afficher quand on run le container.
 
 La configuration se trouve dans le fichier *default* dans etc/nginx/sites-available.
 
@@ -133,16 +137,23 @@ Pour la redirection vers https:// : https://linuxize.com/post/redirect-http-to-h
 - *Les informations sur la configuration viennent de* https://openclassrooms.com/fr/courses/4425101-deployez-une-application-django/4688553-utilisez-le-serveur-http-nginx
 
 ### Implémentation de SSL
-Un certificat SSL est un fichier de données qui lie une clé cryptographique aux informations d'une organisation. Installé sur un serveur, le certificat active le cadenas et le protocole « https », afin d'assurer une connexion sécurisée entre le serveur web et le navigateur. 
+Un certificat SSL est un fichier de données qui lie une clé cryptographique aux informations. Ce certificat active le protocole « https », afin d'assurer une connexion sécurisée entre le serveur web et le navigateur. 
 
-Il est possible de configurer un serveur qui prenne en compte à la fois les requêtes HTTP et HTTPS:
+Ce code permet la redirection vers HTTPS:
 ```
 server {
-    listen              80;
-    listen              443 ssl;
-    server_name         www.example.com;
-    ssl_certificate     www.example.com.crt;
-    ssl_certificate_key www.example.com.key;
+	listen 80;
+	listen [::]:80;
+	server_name localhost www.localhost;
+	return 301 https://localhost$request_uri;
+}
+
+server {
+	listen 443 ssl;
+	listen [::]:443 ssl;
+
+	ssl_certificate /etc/nginx/ssl/localhost.pem;
+	ssl_certificate_key /etc/nginx/ssl/localhost.key;
     ...
 }
 ```
