@@ -1,4 +1,10 @@
 # ft_server
+| | :white_check_mark: Finished |
+|-----|---|
+| **Result**  | [![jaeskim's 42Project Score](https://badge42.herokuapp.com/api/project/lkonig/Libft)](https://github.com/JaeSeoKim/badge42) |
+| **Language** | ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) ![PHP](https://img.shields.io/badge/php-%23777BB4.svg?style=for-the-badge&logo=php&logoColor=white) |
+
+## Description :fr:
 
 **Objectif: installer un server web complet, capable de faire tourner plusieurs services, tel qu’un
 Wordpress, Phpmyadmin, ainsi qu’une base de données. Ce serveur tournera dans un containeur Docker, sous Debian Buster.**
@@ -21,7 +27,7 @@ Nous devons également installer **Phpmyadmin et Wordpress**
 
 Ce serveur web doit être mis en place dans un seul container Docker.
 
-## Docker
+### Docker
 Docker est une plateforme de containers très utilisée, alternative moins gourmande en puissance de calcul que les VM, puisque contrairement à une VM, un conteneur n'embarque pas un OS complet.
 
 Docker et les containers répondent à un problème de portabilité rencontré par les entreprises au cours du développement. Docker permet de créer et de gérer des containers d’applications sur un OS. Le container regroupe  les services, fichiers de configuration et autres composants liés  à l'application en question.
@@ -30,7 +36,7 @@ Chaque container est créé à partir d’une image Docker, déjà créée (à p
 
 *Sources :*
 - https://www.lebigdata.fr/docker-definition#:~:text=Il%20s'agit%20d'une,sur%20un%20syst%C3%A8me%20d'exploitation.&text=Initialement%20cr%C3%A9%C3%A9%20pour%20fonctionner%20avec,Microsoft%20Windows%20ou%20Apple%20macOS.
-### Le Dockerfile
+#### Le Dockerfile
 Le Dockerfile est utilisé pour build l'image. C'est une liste de commandes envoyées au Docker Engine, qui lit les commandes à partir du haut du Dockerfile et les exécute une à une.
 
 `FROM` : indique sur quelle image on va build
@@ -43,7 +49,7 @@ Le Dockerfile est utilisé pour build l'image. C'est une liste de commandes envo
 
 `EXPOSE` : instruction qui précise à Docker le port du container à l'exécution
 
-### Les commandes à connaître
+#### Les commandes à connaître
 `docker images` : List images
 
 `docker ps` : List containers
@@ -85,15 +91,15 @@ Exemple d'utilisation: `docker exec -ti nomcontainerid bash`
 - *Descriptions issues de:* https://docs.docker.com/engine/reference/commandline/docker/
 - *Vidéo pour apprendre à se servir de Docker:* https://youtu.be/iqqDU2crIEQ
 
-## Remarques générales
+### Remarques générales
 `apt-get` permet d'installer des paquets à partir des serveurs Debian:
 - `apt-get update` nous permet de récupérer les listes de paquets disponibles
 - `-y` permet de répondre oui aux demandes de confirmations
 
 `sleep infinity` permet de faire que le container reste actif
 
-## Nginx
-### Installation, configuration et lancement de Nginx
+### Nginx
+#### Installation, configuration et lancement de Nginx
 Installation de nginx : `apt-get -y install nginx`
 Pour initialiser et mettre à jour la configuration de Nginx, il nous faut:
 - créer un nouveau fichier dans sites-available: `RUN mkdir /var/www/localhost`
@@ -136,7 +142,7 @@ Pour la redirection vers https:// : https://linuxize.com/post/redirect-http-to-h
 *Sources :*
 - *Les informations sur la configuration viennent de* https://openclassrooms.com/fr/courses/4425101-deployez-une-application-django/4688553-utilisez-le-serveur-http-nginx
 
-### Implémentation de SSL
+#### Implémentation de SSL
 Un certificat SSL est un fichier de données qui lie une clé cryptographique aux informations. Ce certificat active le protocole « https », afin d'assurer une connexion sécurisée entre le serveur web et le navigateur. 
 
 Ce code permet la redirection vers HTTPS:
@@ -171,12 +177,12 @@ ssl_certificate_key /etc/nginx/ssl/localhost.key;
 - https://www.globalsign.com/fr/centre-information-ssl/definition-certificat-ssl#:~:text=Un certificat SSL est un,serveur web et le navigateur
 - https://www.globalsign.com/fr/centre-information-ssl/definition-certificat-ssl#:~:text=Un%20certificat%20SSL%20est%20un,serveur%20web%20et%20le%20navigateur.
 
-### Autres commandes utiles pour Nginx
+#### Autres commandes utiles pour Nginx
 `nginx -t` permet de savoir si la configuration est ok ou si un problème est détecté
 
 `service nginx stop` et `service nginx reload` permettent d'arrêter et de relancer nginx avec la bonne config
 
-## Base de données
+### Base de données
 Pour accéder à une base de données il faut simplement installer MariaDB et lancer mysql.
 
 Installation de mariadb : `apt-get install -y mariadb-server mariadb-client`
@@ -188,7 +194,7 @@ echo "CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_
 echo "GRANT ALL ON wordpress.* TO 'wordpress_user'@'localhost' IDENTIFIED BY 'password';" | mysql -u root
 echo "FLUSH PRIVILEGES;" | mysql -u root
 ```
-## PHP
+### PHP
 Installation de PHP :
 ```
 RUN apt-get install -y php7.3 php7.3-fpm php7.3-mysql php-common php7.3-cli php7.3-common php7.3-json php7.3-opcache php7.3-readline
@@ -199,7 +205,7 @@ Lancement de PHP : `service php7.3-fpm start`
 
 L'ajout de info.php permet d'accéder à des informations de configuration une fois le container actif.
 
-## phpmyadmin
+### phpmyadmin
 phpMyAdmin est une application de gestion de base de données MySQL réalisée en PHP.
 
 Installation de phpmyadmin :
@@ -223,7 +229,7 @@ Pour se connecter à phpmyadmin une fois le container actif, il faudra utiliser 
 - *Fichier de configuration :* https://docs.phpmyadmin.net/en/latest/config.html#config-examples
 - *Trouver la dernière version de phpmyadmin :* https://www.phpmyadmin.net/downloads/
 
-## Wordpress
+### Wordpress
 WordPress permet de créer et de gérer différents types de sites Web gratuitement. C'est un logiciel écrit en PHP qui fonctionne avec une base de données MySQL.
 
 Installation de wordpress :
